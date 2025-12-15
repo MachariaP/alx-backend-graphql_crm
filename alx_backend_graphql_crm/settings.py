@@ -37,7 +37,17 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # Third Party Apps
+    'graphene_django',
+
+    # Custom Apps
+    'crm',
 ]
+
+GRAPHENE = {
+    'SCHEMA': 'alx_backend_graphql_crm.schema.schema'        
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
