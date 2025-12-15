@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+import os
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -28,6 +29,14 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
+GRAPHENE = {
+    "SCHEMA": "alx_backend_graphql_crm.schema.schema",  # Adjust the path based on where your schema.py is
+    #"MIDDLEWARE": [
+        #"graphql_jwt.middleware.JSONWebTokenMiddleware",
+    #],
+}
+
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -40,6 +49,7 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'graphene_django',
+    'graphql_jwt',
     'django_filters',
     'django_extensions',
 
