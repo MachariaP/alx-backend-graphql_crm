@@ -1,0 +1,1 @@
+0 8 * * * cd /path/to/alx-backend-graphql_crm/crm/cron_jobs && /usr/bin/python3 send_order_reminders.py
