@@ -1,1 +1,1 @@
-0 8 * * * cd /home/phines-macharia/ALX_2025-2026/ProDevBackend/alx-backend-graphql_crm/crm/cron_jobs/ && /usr/bin/python3 send_order_reminders.py
+0 8 * * * /usr/bin/python3 /path/to/alx-backend-graphql_crm/crm/cron_jobs/send_order_reminders.py
