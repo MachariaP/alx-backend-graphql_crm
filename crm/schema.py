@@ -3,7 +3,9 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from django.db import transaction, IntegrityError
 from django.db.models import F
-from crm.models import Customer, Product, Order  # Updated import
+from crm.models import Customer
+from crm.models import Product
+from crm.models import Order
 from .filters import CustomerFilter, ProductFilter, OrderFilter
 
 

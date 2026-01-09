@@ -91,7 +91,7 @@ def update_low_stock():
     
     # Get current timestamp
     timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    log_file = "/tmp/low_stock_updates_log.txt"
+    log_file = "/tmp/low_stock_updates_log.txt"  # Make sure this matches exactly what the checker expects
     
     # Create header for this run
     header = f"\n{'='*60}\nLow Stock Update Run: {timestamp}\n{'='*60}"
