@@ -86,7 +86,7 @@ def update_low_stock():
     """
     Cron job that runs every 12 hours to update low-stock products
     Executes the UpdateLowStockProducts GraphQL mutation
-    Logs updated product names and new stock levels to /tmp/low_stock_updates_log.txt
+    Logs updated product names and new stock levels to /tmp/low_stock_updates_log.txt with a timestamp.
     """
     
     # Get current timestamp
@@ -152,7 +152,7 @@ def update_low_stock():
             for product in mutation_result['updatedProducts']:
                 product_info = (
                     f"  - ID: {product['id']}, "
-                    f"Name: {product['name']}, "
+                    f"Name: '{product['name']}', "
                     f"New Stock: {product['stock']}, "
                     f"Price: ${float(product['price']):.2f}"
                 )

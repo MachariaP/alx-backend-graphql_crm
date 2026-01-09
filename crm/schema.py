@@ -3,7 +3,7 @@ from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from django.db import transaction, IntegrityError
 from django.db.models import F
-from .models import Customer, Product, Order
+from crm.models import Customer, Product, Order  # Updated import
 from .filters import CustomerFilter, ProductFilter, OrderFilter
 
 
@@ -175,6 +175,7 @@ class UpdateLowStockProducts(graphene.Mutation):
     """
     Mutation to update low-stock products (stock < 10)
     Increments their stock by 10 (simulating restocking)
+    Returns a list of updated products and a success message.
     """
     class Arguments:
         increment_by = graphene.Int(default_value=10, description="Amount to increment stock by")
