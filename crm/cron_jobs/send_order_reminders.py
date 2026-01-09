@@ -34,7 +34,6 @@ def get_pending_orders():
     seven_days_ago = (datetime.now() - timedelta(days=7)).strftime('%Y-%m-%d')
     
     # GraphQL query to get pending orders from the last 7 days
-    # Assuming your GraphQL schema has appropriate fields
     query = gql("""
     query GetPendingOrders($sinceDate: String!) {
         orders(
