@@ -127,3 +127,11 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+# django-crontab configuration
+CRONJOBS = [
+    ('*/5 * * * *', 'crm.cron.log_crm_heartbeat'),
+]
+
+# Optional: Where to store cron logs (if not specified, uses default logging)
+CRONTAB_COMMAND_SUFFIX = '2>&1'
