@@ -3,7 +3,7 @@
 # Django-crontab configuration
 INSTALLED_APPS = [
     'django_crontab',
-    'django_celery_beat',  # Add Celery Beat
+    'django_celery_beat',
 ]
 
 CRONJOBS = [
@@ -28,8 +28,6 @@ from celery.schedules import crontab
 CELERY_BEAT_SCHEDULE = {
     'generate-crm-report': {
         'task': 'crm.tasks.generate_crm_report',
-        'schedule': crontab(day_of_week='mon', hour=6, minute=0),  # Every Monday at 6:00 AM
-        'args': (),
-        'kwargs': {},
+        'schedule': crontab(day_of_week='mon', hour=6, minute=0),
     },
 }

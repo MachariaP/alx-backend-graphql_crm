@@ -4,6 +4,7 @@ Celery tasks for CRM application
 
 import os
 import sys
+import requests  # Add this import
 from datetime import datetime
 from celery import shared_task
 from celery.utils.log import get_task_logger
@@ -81,11 +82,8 @@ def generate_crm_report():
                 except (ValueError, TypeError):
                     pass
         
-        # Format the report
-        report_message = (
-            f"{timestamp} - Report: {total_customers} customers, "
-            f"{total_orders} orders, ${total_revenue:.2f} revenue"
-        )
+        # Format the report exactly as specified
+        report_message = f"{timestamp} - Report: {total_customers} customers, {total_orders} orders, {total_revenue:.2f} revenue"
         
         # Log to file
         with open(log_file, 'a') as f:
