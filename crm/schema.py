@@ -2,6 +2,7 @@ import graphene
 from graphene_django import DjangoObjectType
 from graphene_django.filter import DjangoFilterConnectionField
 from django.db import transaction, IntegrityError
+from django.db.models import F
 from .models import Customer, Product, Order
 from .filters import CustomerFilter, ProductFilter, OrderFilter
 
@@ -75,7 +76,7 @@ class OrderFilterInput(graphene.InputObjectType):
     product_name = graphene.String(name="productName")
 
 
-# Mutations (unchanged from your working version)
+# Mutations
 class CreateCustomer(graphene.Mutation):
     class Arguments:
         input = CustomerInput(required=True)
@@ -169,6 +170,58 @@ class CreateOrder(graphene.Mutation):
         return CreateOrder(order=order)
 
 
+# NEW MUTATION: UpdateLowStockProducts
+class UpdateLowStockProducts(graphene.Mutation):
+    """
+    Mutation to update low-stock products (stock < 10)
+    Increments their stock by 10 (simulating restocking)
+    """
+    class Arguments:
+        increment_by = graphene.Int(default_value=10, description="Amount to increment stock by")
+    
+    success = graphene.Boolean()
+    message = graphene.String()
+    update_count = graphene.Int()
+    updated_products = graphene.List(ProductType)
+    
+    def mutate(self, info, increment_by=10):
+        try:
+            # Query products with stock < 10
+            low_stock_products = Product.objects.filter(stock__lt=10)
+            
+            if not low_stock_products.exists():
+                return UpdateLowStockProducts(
+                    success=True,
+                    message="No low-stock products found (stock < 10)",
+                    update_count=0,
+                    updated_products=[]
+                )
+            
+            # Store product IDs before update for returning
+            product_ids = list(low_stock_products.values_list('id', flat=True))
+            
+            # Increment stock by specified amount
+            updated_count = low_stock_products.update(stock=F('stock') + increment_by)
+            
+            # Get the updated products
+            updated_products = Product.objects.filter(id__in=product_ids)
+            
+            return UpdateLowStockProducts(
+                success=True,
+                message=f"Successfully updated {updated_count} low-stock products",
+                update_count=updated_count,
+                updated_products=updated_products
+            )
+            
+        except Exception as e:
+            return UpdateLowStockProducts(
+                success=False,
+                message=f"Error updating low-stock products: {str(e)}",
+                update_count=0,
+                updated_products=[]
+            )
+
+
 # Query with Filtering and Ordering
 class Query(graphene.ObjectType):
     all_customers = DjangoFilterConnectionField(
@@ -190,9 +243,10 @@ class Query(graphene.ObjectType):
     hello = graphene.String(default_value="Hello, GraphQL!")
 
 
-# Mutation root
+# Mutation root - ADD THE NEW MUTATION HERE
 class Mutation(graphene.ObjectType):
     create_customer = CreateCustomer.Field()
     bulk_create_customers = BulkCreateCustomers.Field()
     create_product = CreateProduct.Field()
     create_order = CreateOrder.Field()
+    update_low_stock_products = UpdateLowStockProducts.Field()

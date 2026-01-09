@@ -128,10 +128,23 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-# django-crontab configuration
-CRONJOBS = [
-    ('*/5 * * * *', 'crm.cron.log_crm_heartbeat'),
-]
-
-# Optional: Where to store cron logs (if not specified, uses default logging)
-CRONTAB_COMMAND_SUFFIX = '2>&1'
+# Import settings from crm/settings.py if it exists
+try:
+    from crm.settings import INSTALLED_APPS as CRM_INSTALLED_APPS
+    from crm.settings import CRONJOBS as CRM_CRONJOBS
+    
+    # Add django_crontab to INSTALLED_APPS if not already there
+    if 'django_crontab' not in INSTALLED_APPS:
+        INSTALLED_APPS.append('django_crontab')
+    
+    # Add CRONJOBS configuration
+    CRONJOBS = CRM_CRONJOBS
+    
+except ImportError:
+    # If crm/settings.py doesn't exist, define defaults here
+    INSTALLED_APPS.append('django_crontab')
+    
+    CRONJOBS = [
+        ('*/5 * * * *', 'crm.cron.log_crm_heartbeat'),
+        ('0 */12 * * *', 'crm.cron.update_low_stock'),
+    ]
